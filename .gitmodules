@@ -1,3 +1,6 @@
 [submodule "market_protos"]
 	path = market_protos
 	url = git@gitlab.com:market6405216/market_protos.git
+[submodule "market_go_organization_service"]
+	path = market_go_organization_service
+	url = git@gitlab.com:market6405216/market_go_organization_service.git
