@@ -142,42 +142,30 @@ func (r *branchRepo) GetAll(ctx context.Context, req *pb.GetListBranchRequest) (
 	}
 
 	for rows.Next() {
-		var (
-			branch_id      sql.NullString
-			branch_code    sql.NullString
-			branch_name    sql.NullString
-			branch_address sql.NullString
-			createdAt      sql.NullString
-			updatedAt      sql.NullString
-		)
+
+		var branch pb.Branch
 
 		err = rows.Scan(
-			&branch_id,
-			&branch_code,
-			&branch_name,
-			&branch_address,
-			&createdAt,
-			&updatedAt,
+			&resp.Count,
+			&branch.BranchId,
+			&branch.BranchCode,
+			&branch.BranchName,
+			&branch.BranchAddress,
+			&branch.CreatedAt,
+			&branch.UpdatedAt,
 		)
 
 		if err != nil {
 			return &resp, err
 		}
 
-		resp.Branches = append(resp.Branches, &pb.Branch{
-			BranchId:      branch_id.String,
-			BranchCode:    branch_code.String,
-			BranchName:    branch_name.String,
-			BranchAddress: branch_address.String,
-			CreatedAt:     createdAt.String,
-			UpdatedAt:     updatedAt.String,
-		})
+		resp.Branches = append(resp.Branches, &branch)
 	}
 
 	return &resp, nil
 }
 
-func (r *branchRepo) Update(ctx context.Context, req *pb.UpdateBranch) (rowsAffected int64,err error) {
+func (r *branchRepo) Update(ctx context.Context, req *pb.UpdateBranch) (rowsAffected int64, err error) {
 	var (
 		query  string
 		params map[string]interface{}

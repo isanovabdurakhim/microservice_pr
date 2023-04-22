@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"net"
-	"position_service/config"
-	"position_service/grpc"
-	"position_service/pkg/logger"
-	"position_service/storage/postgres"
+	"app/config"
+	"app/grpc"
+	"app/pkg/logger"
+	"app/storage/postgres"
 )
 
 func main() {

@@ -1,1 +1,4 @@
-DROP TABLE IF EXISTS profession; 
+DROP TABLE IF EXISTS branches; 
+DROP TABLE IF EXISTS curiers; 
+DROP TABLE IF EXISTS employees; 
+DROP TABLE IF EXISTS stores; 
