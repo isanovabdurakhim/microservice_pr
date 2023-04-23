@@ -49,7 +49,7 @@ func (c *employeeRepo) Create(ctx context.Context, req *pb.CreateEmployee) (resp
 		return nil, err
 	}
 
-	return &pb.EmployeePrimaryKey{EmployeeId: employee_id.String()}, nil
+	return &pb.EmployeePrimaryKey{Id: employee_id.String()}, nil
 }
 
 func (c *employeeRepo) GetById(ctx context.Context, req *pb.EmployeePrimaryKey) (resp *pb.Employee, err error) {

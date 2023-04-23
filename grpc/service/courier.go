@@ -13,32 +13,32 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type curierService struct {
+type courierService struct {
 	cfg  config.Config
 	log  logger.LoggerI
 	strg storage.StorageI
-	pb.UnimplementedCurierServiceServer
+	pb.UnimplementedCourierServiceServer
 }
 
-func NewCurierService(cfg config.Config, log logger.LoggerI, strg storage.StorageI) *curierService {
-	return &curierService{
+func NewCourierService(cfg config.Config, log logger.LoggerI, strg storage.StorageI) *courierService {
+	return &courierService{
 		cfg:  cfg,
 		log:  log,
 		strg: strg,
 	}
 }
 
-func (i *curierService) Create(ctx context.Context, req *pb.Createcurier) (resp *pb.curier, err error) {
+func (i *courierService) Create(ctx context.Context, req *pb.CreateCourier) (resp *pb.Courier, err error) {
 
 	i.log.Info("---Createcurier------>", logger.Any("req", req))
 
-	pKey, err := i.strg.Curier().Create(ctx, req)
+	pKey, err := i.strg.Courier().Create(ctx, req)
 	if err != nil {
 		i.log.Error("!!!Createcurier->curier->Create--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	resp, err = i.strg.Curier().GetById(ctx, pKey)
+	resp, err = i.strg.Courier().GetById(ctx, pKey)
 	if err != nil {
 		i.log.Error("!!!GetByPKeycurier->curier->GetByID--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -47,13 +47,13 @@ func (i *curierService) Create(ctx context.Context, req *pb.Createcurier) (resp 
 	return
 }
 
-func (c *curierService) GetById(ctx context.Context, req *pb.curierPrimaryKey) (resp *pb.curier, err error) {
+func (c *courierService) GetById(ctx context.Context, req *pb.CourierPrimaryKey) (resp *pb.Courier, err error) {
 
 	fmt.Println("ok")
 
 	c.log.Info("---GetcurierByID------>", logger.Any("req", req))
 
-	resp, err = c.strg.Curier().GetById(ctx, req)
+	resp, err = c.strg.Courier().GetById(ctx, req)
 	if err != nil {
 		c.log.Error("!!!GetcurierByID->curier->Get--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -62,11 +62,11 @@ func (c *curierService) GetById(ctx context.Context, req *pb.curierPrimaryKey) (
 	return
 }
 
-func (i *curierService) GetList(ctx context.Context, req *pb.GetListcurierRequest) (resp *pb.GetListcurierResponse, err error) {
+func (i *courierService) GetList(ctx context.Context, req *pb.GetListCourierRequest) (resp *pb.GetListCourierResponse, err error) {
 
 	i.log.Info("---GetCategories------>", logger.Any("req", req))
 
-	resp, err = i.strg.Curier().GetAll(ctx, req)
+	resp, err = i.strg.Courier().GetAll(ctx, req)
 	if err != nil {
 		i.log.Error("!!!GetCategories->curier->Get--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -75,11 +75,11 @@ func (i *curierService) GetList(ctx context.Context, req *pb.GetListcurierReques
 	return
 }
 
-func (i *curierService) Update(ctx context.Context, req *pb.Updatecurier) (resp *pb.curier, err error) {
+func (i *courierService) Update(ctx context.Context, req *pb.UpdateCourier) (resp *pb.Courier, err error) {
 
 	i.log.Info("---Updatecurier------>", logger.Any("req", req))
 
-	rowsAffected, err := i.strg.Curier().Update(ctx, req)
+	rowsAffected, err := i.strg.Courier().Update(ctx, req)
 
 	if err != nil {
 		i.log.Error("!!!Updatecurier--->", logger.Error(err))
@@ -90,7 +90,7 @@ func (i *curierService) Update(ctx context.Context, req *pb.Updatecurier) (resp 
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
 	}
 
-	resp, err = i.strg.Curier().GetById(ctx, &pb.curierPrimaryKey{curierId: req.curierId})
+	resp, err = i.strg.Courier().GetById(ctx, &pb.CourierPrimaryKey{Id: req.CourierId})
 	if err != nil {
 		i.log.Error("!!!Getcurier->curier->Get--->", logger.Error(err))
 		return nil, status.Error(codes.NotFound, err.Error())
@@ -99,11 +99,11 @@ func (i *curierService) Update(ctx context.Context, req *pb.Updatecurier) (resp 
 	return resp, err
 }
 
-func (i *curierService) Delete(ctx context.Context, req *pb.curierPrimaryKey) (resp *empty.Empty, err error) {
+func (i *courierService) Delete(ctx context.Context, req *pb.CourierPrimaryKey) (resp *empty.Empty, err error) {
 
-	i.log.Info("---DeleteCurier------>", logger.Any("req", req))
+	i.log.Info("---DeleteCourier------>", logger.Any("req", req))
 
-	err = i.strg.Curier().Delete(ctx, req)
+	err = i.strg.Courier().Delete(ctx, req)
 	if err != nil {
 		i.log.Error("!!!Deletecurier->curier->Get--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())

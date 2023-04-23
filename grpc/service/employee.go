@@ -28,41 +28,41 @@ func NewEmployeeService(cfg config.Config, log logger.LoggerI, strg storage.Stor
 	}
 }
 
-func (i *employeeService) Create(ctx context.Context, req *pb.Createemployee) (resp *pb.employee, err error) {
+func (i *employeeService) Create(ctx context.Context, req *pb.CreateEmployee) (resp *pb.Employee, err error) {
 
-	i.log.Info("---Createemployee------>", logger.Any("req", req))
+	i.log.Info("---CreateEmployee------>", logger.Any("req", req))
 
 	pKey, err := i.strg.Employee().Create(ctx, req)
 	if err != nil {
-		i.log.Error("!!!Createemployee->employee->Create--->", logger.Error(err))
+		i.log.Error("!!!CreateEmployee->Employee->Create--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	resp, err = i.strg.Employee().GetById(ctx, pKey)
 	if err != nil {
-		i.log.Error("!!!GetByPKeyemployee->employee->GetByID--->", logger.Error(err))
+		i.log.Error("!!!GetByPKeyemployee->Employee->GetByID--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	return
 }
 
-func (c *employeeService) GetById(ctx context.Context, req *pb.employeePrimaryKey) (resp *pb.employee, err error) {
+func (c *employeeService) GetById(ctx context.Context, req *pb.EmployeePrimaryKey) (resp *pb.Employee, err error) {
 
 	fmt.Println("ok")
 
-	c.log.Info("---GetemployeeByID------>", logger.Any("req", req))
+	c.log.Info("---GetEmployeeByID------>", logger.Any("req", req))
 
 	resp, err = c.strg.Employee().GetById(ctx, req)
 	if err != nil {
-		c.log.Error("!!!GetemployeeByID->employee->Get--->", logger.Error(err))
+		c.log.Error("!!!GetemployeeByID->Employee->Get--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	return
 }
 
-func (i *employeeService) GetList(ctx context.Context, req *pb.GetListemployeeRequest) (resp *pb.GetListemployeeResponse, err error) {
+func (i *employeeService) GetList(ctx context.Context, req *pb.GetListEmployeeRequest) (resp *pb.GetListEmployeeResponse, err error) {
 
 	i.log.Info("---GetCategories------>", logger.Any("req", req))
 
@@ -75,14 +75,14 @@ func (i *employeeService) GetList(ctx context.Context, req *pb.GetListemployeeRe
 	return
 }
 
-func (i *employeeService) Update(ctx context.Context, req *pb.Updateemployee) (resp *pb.employee, err error) {
+func (i *employeeService) Update(ctx context.Context, req *pb.UpdateEmployee) (resp *pb.Employee, err error) {
 
-	i.log.Info("---Updateemployee------>", logger.Any("req", req))
+	i.log.Info("---UpdateEmployee------>", logger.Any("req", req))
 
 	rowsAffected, err := i.strg.Employee().Update(ctx, req)
 
 	if err != nil {
-		i.log.Error("!!!Updateemployee--->", logger.Error(err))
+		i.log.Error("!!!UpdateEmployee--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -90,7 +90,7 @@ func (i *employeeService) Update(ctx context.Context, req *pb.Updateemployee) (r
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
 	}
 
-	resp, err = i.strg.Employee().GetById(ctx, &pb.employeePrimaryKey{employeeId: req.employeeId})
+	resp, err = i.strg.Employee().GetById(ctx, &pb.EmployeePrimaryKey{Id: req.EmployeeId})
 	if err != nil {
 		i.log.Error("!!!Getemployee->employee->Get--->", logger.Error(err))
 		return nil, status.Error(codes.NotFound, err.Error())
@@ -99,7 +99,7 @@ func (i *employeeService) Update(ctx context.Context, req *pb.Updateemployee) (r
 	return resp, err
 }
 
-func (i *employeeService) Delete(ctx context.Context, req *pb.employeePrimaryKey) (resp *empty.Empty, err error) {
+func (i *employeeService) Delete(ctx context.Context, req *pb.EmployeePrimaryKey) (resp *empty.Empty, err error) {
 
 	i.log.Info("---DeleteEmployee------>", logger.Any("req", req))
 

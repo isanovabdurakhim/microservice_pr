@@ -11,7 +11,7 @@ import (
 type Store struct {
 	db       *pgxpool.Pool
 	branch   storage.BranchRepoI
-	curier   storage.CurierRepoI
+	curier   storage.CourierRepoI
 	employee storage.EmployeeRepoI
 	store    storage.StoreRepoI
 }
@@ -40,9 +40,9 @@ func (s *Store) Branch() storage.BranchRepoI {
 	return s.branch
 }
 
-func (s *Store) Curier() storage.CurierRepoI {
+func (s *Store) Courier() storage.CourierRepoI {
 	if s.curier == nil {
-		s.curier = NewCurierRepo(s.db)
+		s.curier = NewCourierRepo(s.db)
 	}
 
 	return s.curier

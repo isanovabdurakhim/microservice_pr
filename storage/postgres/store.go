@@ -45,7 +45,7 @@ func (c *storeRepo) Create(ctx context.Context, req *pb.CreateStore) (resp *pb.S
 		return nil, err
 	}
 
-	return &pb.StorePrimaryKey{StoreId: store_id.String()}, nil
+	return &pb.StorePrimaryKey{Id: store_id.String()}, nil
 }
 
 func (c *storeRepo) GetById(ctx context.Context, req *pb.StorePrimaryKey) (resp *pb.Store, err error) {

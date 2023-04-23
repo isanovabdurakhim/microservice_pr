@@ -12,22 +12,22 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-type curierRepo struct {
+type courierRepo struct {
 	db *pgxpool.Pool
 }
 
-func NewCurierRepo(db *pgxpool.Pool) storage.CurierRepoI {
-	return &curierRepo{
+func NewCourierRepo(db *pgxpool.Pool) storage.CourierRepoI {
+	return &courierRepo{
 		db: db,
 	}
 }
 
-func (c *curierRepo) Create(ctx context.Context, req *pb.CreateCurier) (resp *pb.CurierPrimaryKey, err error) {
+func (c *courierRepo) Create(ctx context.Context, req *pb.CreateCourier) (resp *pb.CourierPrimaryKey, err error) {
 
-	var curier_id = uuid.New()
+	var courier_id = uuid.New()
 
-	query := `INSERT INTO "curiers" (
-				curier_id,
+	query := `INSERT INTO "couriers" (
+				courier_id,
 				first_name,
 				last_name,
 				phone_number,
@@ -37,7 +37,7 @@ func (c *curierRepo) Create(ctx context.Context, req *pb.CreateCurier) (resp *pb
 
 	_, err = c.db.Exec(ctx,
 		query,
-		curier_id.String(),
+		courier_id.String(),
 		req.FirstName,
 		req.LastName,
 		req.PhoneNumber,
@@ -47,10 +47,10 @@ func (c *curierRepo) Create(ctx context.Context, req *pb.CreateCurier) (resp *pb
 		return nil, err
 	}
 
-	return &pb.CurierPrimaryKey{CurierId: curier_id.String()}, nil
+	return &pb.CourierPrimaryKey{Id: courier_id.String()}, nil
 }
 
-func (c *curierRepo) GetById(ctx context.Context, req *pb.CurierPrimaryKey) (resp *pb.Curier, err error) {
+func (c *courierRepo) GetById(ctx context.Context, req *pb.CourierPrimaryKey) (resp *pb.Courier, err error) {
 
 	query := `
 		SELECT
@@ -65,7 +65,7 @@ func (c *curierRepo) GetById(ctx context.Context, req *pb.CurierPrimaryKey) (res
 	`
 
 	var (
-		curier_id    sql.NullString
+		courier_id    sql.NullString
 		first_name   sql.NullString
 		last_name    sql.NullString
 		phone_number sql.NullString
@@ -75,7 +75,7 @@ func (c *curierRepo) GetById(ctx context.Context, req *pb.CurierPrimaryKey) (res
 	)
 
 	err = c.db.QueryRow(ctx, query, req.Id).Scan(
-		&curier_id,
+		&courier_id,
 		&first_name,
 		&last_name,
 		&phone_number,
@@ -88,8 +88,8 @@ func (c *curierRepo) GetById(ctx context.Context, req *pb.CurierPrimaryKey) (res
 		return resp, err
 	}
 
-	resp = &pb.Curier{
-		CurierId:  curier_id.String,
+	resp = &pb.Courier{
+		CourierId:  courier_id.String,
 		FirstName: first_name.String,
 		LastName:  last_name.String,
 		PhoneNumber: phone_number.String,
@@ -101,9 +101,9 @@ func (c *curierRepo) GetById(ctx context.Context, req *pb.CurierPrimaryKey) (res
 	return
 }
 
-func (c *curierRepo) GetAll(ctx context.Context, req *pb.GetListCurierRequest) (resp *pb.GetListCurierResponse, err error) {
+func (c *courierRepo) GetAll(ctx context.Context, req *pb.GetListCourierRequest) (resp *pb.GetListCourierResponse, err error) {
 
-	resp = &pb.GetListCurierResponse{}
+	resp = &pb.GetListCourierResponse{}
 
 	var (
 		query  string
@@ -149,30 +149,30 @@ func (c *curierRepo) GetAll(ctx context.Context, req *pb.GetListCurierRequest) (
 
 	for rows.Next() {
 
-		var curier pb.Curier
+		var courier pb.Courier
 
 		err := rows.Scan(
 			&resp.Count,
-			&curier.CurierId,
-			&curier.FirstName,
-			&curier.LastName,
-			&curier.PhoneNumber,
-			&curier.CreatedAt,
-			&curier.UpdatedAt,
-			&curier.DeletedAt,
+			&courier.CourierId,
+			&courier.FirstName,
+			&courier.LastName,
+			&courier.PhoneNumber,
+			&courier.CreatedAt,
+			&courier.UpdatedAt,
+			&courier.DeletedAt,
 		)
 
 		if err != nil {
 			return resp, err
 		}
 
-		resp.Curiers = append(resp.Curiers, &curier)
+		resp.Couriers = append(resp.Couriers, &courier)
 	}
 
 	return
 }
 
-func (c *curierRepo) Update(ctx context.Context, req *pb.UpdateCurier) (rowsAffected int64, err error) {
+func (c *courierRepo) Update(ctx context.Context, req *pb.UpdateCourier) (rowsAffected int64, err error) {
 
 	var (
 		query  string
@@ -190,7 +190,7 @@ func (c *curierRepo) Update(ctx context.Context, req *pb.UpdateCurier) (rowsAffe
 			WHERE
 				curier_id = :curier_id`
 	params = map[string]interface{}{
-		"curier_id":      req.GetCurierId(),
+		"courier_id":      req.GetCourierId(),
 		"first_name":    req.GetFirstName(),
 		"last_name":    req.GetLastName(),
 		"phone_number": req.GetPhoneNumber(),
@@ -206,7 +206,7 @@ func (c *curierRepo) Update(ctx context.Context, req *pb.UpdateCurier) (rowsAffe
 	return result.RowsAffected(), nil
 }
 
-func (c *curierRepo) Delete(ctx context.Context, req *pb.CurierPrimaryKey) error {
+func (c *courierRepo) Delete(ctx context.Context, req *pb.CourierPrimaryKey) error {
 
 	query := `DELETE FROM "curiers" WHERE curier_id = $1`
 

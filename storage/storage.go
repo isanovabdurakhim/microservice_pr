@@ -8,7 +8,7 @@ import (
 type StorageI interface {
 	Branch() BranchRepoI
 	Employee() EmployeeRepoI
-	Curier() CurierRepoI
+	Courier() CourierRepoI
 	Store() StoreRepoI
 }
 
@@ -20,12 +20,12 @@ type BranchRepoI interface {
 	Delete(ctx context.Context, req *pb.BranchPrimaryKey) error
 }
 
-type CurierRepoI interface {
-	Create(ctx context.Context, req *pb.CreateCurier) (resp *pb.CurierPrimaryKey, err error)
-	GetAll(ctx context.Context, req *pb.GetListCurierRequest) (*pb.GetListCurierResponse, error)
-	GetById(ctx context.Context, req *pb.CurierPrimaryKey) (*pb.Curier, error)
-	Update(ctx context.Context, req *pb.UpdateCurier) (rowsAffected int64, err error)
-	Delete(ctx context.Context, req *pb.CurierPrimaryKey) error
+type CourierRepoI interface {
+	Create(ctx context.Context, req *pb.CreateCourier) (resp *pb.CourierPrimaryKey, err error)
+	GetAll(ctx context.Context, req *pb.GetListCourierRequest) (*pb.GetListCourierResponse, error)
+	GetById(ctx context.Context, req *pb.CourierPrimaryKey) (*pb.Courier, error)
+	Update(ctx context.Context, req *pb.UpdateCourier) (rowsAffected int64, err error)
+	Delete(ctx context.Context, req *pb.CourierPrimaryKey) error
 }
 
 type StoreRepoI interface {

@@ -15,9 +15,9 @@ func SetUpServer(cfg config.Config, log logger.LoggerI, strg storage.StorageI) (
 	grpcServer = grpc.NewServer()
 
 	pb.RegisterBranchServiceServer(grpcServer, service.NewBranchService(cfg, log, strg))
-	pb.RegisterCurierServiceServer(grpcServer, service.NewCurierService(cfg, log, strg))
+	pb.RegisterCourierServiceServer(grpcServer, service.NewCourierService(cfg, log, strg))
 	pb.RegisterEmployeeServiceServer(grpcServer, service.NewEmployeeService(cfg, log, strg))
-	pb.RegisterStoreServiceSErver(grpcServer, service.NewStoreService(cfg, log, strg))
+	pb.RegisterStoreServiceServer(grpcServer, service.NewStoreService(cfg, log, strg))
 
 	reflection.Register(grpcServer)
 	return

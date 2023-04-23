@@ -90,7 +90,7 @@ func (i *branchService) Update(ctx context.Context, req *pb.UpdateBranch) (resp 
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
 	}
 
-	resp, err = i.strg.Branch().GetById(ctx, &pb.BranchPrimaryKey{BranchId: req.BranchId})
+	resp, err = i.strg.Branch().GetById(ctx, &pb.BranchPrimaryKey{Id: req.BranchId})
 	if err != nil {
 		i.log.Error("!!!GetBranch->Branch->Get--->", logger.Error(err))
 		return nil, status.Error(codes.NotFound, err.Error())
